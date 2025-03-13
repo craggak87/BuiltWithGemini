@@ -1,44 +1,23 @@
 # CNC Serial Communicator
 
-## Overview
+## Description
 
 The CNC Serial Communicator is a PyQt6-based GUI application designed to facilitate communication with CNC machines via a serial port. The application allows users to configure serial port settings, select and send CNC program files, receive data from the CNC machine, and save the received data.
 
-## Dependencies
+## Setup Instructions
 
-- Python 3.x
-- PyQt6
-- pyserial
+1. **Clone the repository**:
+    ```sh
+    git clone https://github.com/yourusername/cnc-serial-communicator.git
+    cd cnc-serial-communicator
+    ```
 
-## Features
-
-- **Serial Port Configuration**: Configure serial port settings including port, baud rate, data bits, stop bits, parity, and flow control.
-- **Open/Close Serial Port**: Open and close the serial port with the configured settings.
-- **File Selection**: Select a CNC program file to be sent over the serial port.
-- **Send File**: Send the selected CNC program file over the serial port.
-- **Receive Data**: Receive data from the CNC machine and display it in the application.
-- **Save Received Data**: Save the received data to a file.
-
-## Requirements
-
-- Python 3.x
-- PyQt6
-- pyserial
-
-## Constraints
-
-- The application assumes that the CNC machine is connected to one of the available serial ports.
-- The application supports common serial port settings but may need adjustments for specific CNC machine configurations.
-- The file selection dialog filters for CNC program files with extensions `.nc` and `.txt`.
-
-## Installation
-
-1. Install the required packages:
+2. **Install the required packages**:
     ```sh
     pip install PyQt6 pyserial
     ```
 
-2. Run the application:
+3. **Run the application**:
     ```sh
     python cnc_serial_app.py
     ```
@@ -54,6 +33,31 @@ The CNC Serial Communicator is a PyQt6-based GUI application designed to facilit
 7. **Save received data**: Click the "Save Received Data" button to open a file dialog and save the received data to a file.
 8. **Close the serial port**: Click the "Close Serial Port" button to close the serial port.
 
-## Summary
+## Contributor Guidelines
 
-The CNC Serial Communicator provides a user-friendly interface for configuring serial port settings, selecting and sending CNC program files, receiving data from the CNC machine, and saving the received data. It leverages PyQt6 for the GUI and pyserial for serial communication, making it a versatile tool for CNC machine operators and developers.
+We welcome contributions to the CNC Serial Communicator project! To contribute, please follow these steps:
+
+1. **Fork the repository**: Click the "Fork" button at the top right of this page to create a copy of this repository in your GitHub account.
+2. **Clone your fork**: Clone your forked repository to your local machine.
+    ```sh
+    git clone https://github.com/yourusername/cnc-serial-communicator.git
+    cd cnc-serial-communicator
+    ```
+3. **Create a branch**: Create a new branch for your feature or bug fix.
+    ```sh
+    git checkout -b my-feature-branch
+    ```
+4. **Make your changes**: Make your changes to the codebase.
+5. **Commit your changes**: Commit your changes with a descriptive commit message.
+    ```sh
+    git commit -m "Add new feature"
+    ```
+6. **Push to your fork**: Push your changes to your forked repository.
+    ```sh
+    git push origin my-feature-branch
+    ```
+7. **Create a pull request**: Open a pull request to the main repository, describing your changes and why they should be merged.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
