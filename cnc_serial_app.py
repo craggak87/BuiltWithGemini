@@ -12,12 +12,12 @@ class SerialApp(QMainWindow):
 
     def initUI(self):
         self.setWindowTitle('CNC Serial Communicator')
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 1000, 800) # Increased window size
 
         central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
-        layout = QVBoxLayout(central_widget)
+        main_layout = QVBoxLayout(central_widget)
 
         form_layout = QFormLayout()
 
@@ -45,30 +45,42 @@ class SerialApp(QMainWindow):
         self.flow_combo.addItems(['None', 'XON/XOFF', 'RTS/CTS', 'DTR/DSR'])
         form_layout.addRow(QLabel('Flow Control:'), self.flow_combo)
 
-        layout.addLayout(form_layout)
+        main_layout.addLayout(form_layout)
+
+        button_layout = QVBoxLayout()
 
         self.open_button = QPushButton('Open Serial Port')
         self.open_button.clicked.connect(self.open_serial_port)
-        layout.addWidget(self.open_button)
+        button_layout.addWidget(self.open_button)
 
         self.close_button = QPushButton('Close Serial Port')
         self.close_button.clicked.connect(self.close_serial_port)
-        layout.addWidget(self.close_button)
+        button_layout.addWidget(self.close_button)
 
         self.file_button = QPushButton('Select File')
         self.file_button.clicked.connect(self.select_file)
-        layout.addWidget(self.file_button)
+        button_layout.addWidget(self.file_button)
 
         self.send_button = QPushButton('Send File')
         self.send_button.clicked.connect(self.send_file)
-        layout.addWidget(self.send_button)
+        button_layout.addWidget(self.send_button)
 
         self.receive_button = QPushButton('Receive Data')
         self.receive_button.clicked.connect(self.receive_data)
-        layout.addWidget(self.receive_button)
+        button_layout.addWidget(self.receive_button)
+
+        self.save_button = QPushButton('Save Received Data')
+        self.save_button.clicked.connect(self.save_received_data)
+        button_layout.addWidget(self.save_button)
+
+        main_layout.addLayout(button_layout)
+
+        self.file_display = QTextEdit()
+        self.file_display.setReadOnly(True) # Make it read-only
+        main_layout.addWidget(self.file_display)
 
         self.text_edit = QTextEdit()
-        layout.addWidget(self.text_edit)
+        main_layout.addWidget(self.text_edit)
 
         self.show()
 
@@ -121,6 +133,11 @@ class SerialApp(QMainWindow):
         if file_path:
             self.file_path = file_path
             self.text_edit.append(f"File selected: {file_path}")
+            try:
+                with open(file_path, 'r') as file:
+                    self.file_display.setPlainText(file.read())
+            except Exception as e:
+                self.file_display.setPlainText(f"Error reading file: {e}")
 
     def send_file(self):
         if self.ser and self.ser.is_open and self.file_path:
@@ -147,6 +164,7 @@ class SerialApp(QMainWindow):
             try:
                 if self.ser.in_waiting > 0:
                     data = self.ser.read(self.ser.in_waiting)
+                    self.file_display.setPlainText(data.decode())
                     self.text_edit.append(f"Received data: {data}")
                 else:
                     self.text_edit.append("No data available to receive.")
@@ -158,6 +176,17 @@ class SerialApp(QMainWindow):
                 self.text_edit.append(f"An unexpected error occurred: {e}")
         else:
             self.text_edit.append("Serial port not open.")
+
+    def save_received_data(self):
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getSaveFileName(self, 'Save Received Data', '', 'Text Files (*.txt);;All Files (*)')
+        if file_path:
+            try:
+                with open(file_path, 'w') as file:
+                    file.write(self.file_display.toPlainText())
+                self.text_edit.append(f"Received data saved to: {file_path}")
+            except Exception as e:
+                self.text_edit.append(f"Error saving received data: {e}")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
